@@ -49,7 +49,8 @@ def parseDBSite(mo):
 
 def cellParser(mo,sqlfile):
     #LTE parse with earfcn
-    conn = sqlite3.connect(sqlfile)
+    folder = 'imports' + '/' + sqlfile
+    conn = sqlite3.connect(folder)
     cur = conn.cursor()
     df = pd.read_sql("select * from {}".format(mo), conn)
     cols = df.columns.values

@@ -8,8 +8,8 @@ molist = ["ENODEBALGOSWITCH","CAMGTCFG","CELLINTERFREQHOCOV"]
 
 sqldbname = sqldbdate + ".sqlite"
 
-final_file = open("inconsistency2" + sqldbdate +".txt","w")
-final_file_freq = open("inconsistency2" + sqldbdate +"_freq.txt","w")
+final_file = open("exports\inconsistency2" + sqldbdate +".txt","w")
+final_file_freq = open("exports\inconsistency2" + sqldbdate +"_freq.txt","w")
 
 
 
