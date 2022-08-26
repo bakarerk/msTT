@@ -1,4 +1,4 @@
-from huaweiDumpLibrary import parseDBCell3G,parseDBSite,parseDBCell,excList,cellParser
+from huaweiDumpLibrary import parseDBSite,excList,cellParser
 
 
 ###########################################
