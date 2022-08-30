@@ -5,9 +5,10 @@ import sqlite3
 sqldbdate = "20220823"
 ###########################################
 
+
 sqldbname = sqldbdate + ".sqlite"
 folder = 'imports' + '/' + sqldbname
-final_file = open("exports\missingmo_counts" + sqldbdate +".txt","w")
+final_file = open("exports\\01_missingmo_counts" + sqldbdate +".txt","w")
 
 table_list = tableList(sqldbname)
 
@@ -22,7 +23,7 @@ for mo in table_list:
         result = cursor.fetchall()
         if result[0][0]>0:
             print("{}:{}".format(mo,result[0][0]))
-            final_file.write("{}/t{}/t2G".format(mo,result[0][0]))
+            final_file.write("{}\t{}\t2G\n".format(mo,result[0][0]))
 
     except:
         cursor.close()
@@ -35,7 +36,7 @@ for mo in table_list:
         result = cursor.fetchall()
         if result[0][0]>0:
             print("{}:{}".format(mo,result[0][0]))
-            final_file.write("{}/t{}/t3G".format(mo,result[0][0]))
+            final_file.write("{}\t{}\t3G\n".format(mo,result[0][0]))
 
     except:
         cursor.close()
@@ -48,7 +49,7 @@ for mo in table_list:
         result = cursor.fetchall()
         if result[0][0]>0:
             print("{}:{}".format(mo,result[0][0]))
-            final_file.write("{}/t{}/t4G".format(mo,result[0][0]))
+            final_file.write("{}\t{}\t4G\n".format(mo,result[0][0]))
     except:
         cursor.close()
 
@@ -60,7 +61,7 @@ for mo in table_list:
         result = cursor.fetchall()
         if result[0][0]>0:
             print("{}:{}".format(mo,result[0][0]))
-            final_file.write("{}/t{}/tNode".format(mo,result[0][0]))
+            final_file.write("{}\t{}\tNode\n".format(mo,result[0][0]))
 
     except:
         cursor.close()

@@ -2,14 +2,14 @@ from huaweiDumpLibrary import parseDBSite,excList,cellParser
 
 
 ###########################################
-sqldbdate = "20220823"
-molist = ["ENODEBALGOSWITCH","CAMGTCFG","CELLINTERFREQHOCOV"]
+sqldbdate = "20220823 - Copy"
+molist = ["CELLHOCOMM","CELLHOPARACFG"]
 ###########################################
 
 sqldbname = sqldbdate + ".sqlite"
 
-final_file = open("exports\inconsistency2" + sqldbdate +".txt","w")
-final_file_freq = open("exports\inconsistency2" + sqldbdate +"_freq.txt","w")
+final_file = open("exports\\03_all_sets_distribution_" + sqldbdate +".txt","w")
+final_file_freq = open("exports\\03_all_sets_distribution_" + sqldbdate +"_freq.txt","w")
 
 
 
@@ -35,9 +35,9 @@ for mo in molist:
 
                 if "&" not in str(paraDict):
                     for parameter,count in paraDict.items():
-                        final_file.write("{}/t{}/t{}/t{}/t{}/t{:.2f}/t{}\n".format(mo,cols,parameter,count,sum(paraDict.values()),100*count/sum(paraDict.values()),result))
+                        final_file.write("{}\t{}\t{}\t{}\t{}\t{:.2f}\t{}\n".format(mo,cols,parameter,count,sum(paraDict.values()),100*count/sum(paraDict.values()),result))
                     for parameter,count in freqBasedDict.items():
-                        final_file_freq.write("{}/t{}/t{}/t{}/t{}/t{:.2f}/t{}\n".format(mo,cols,parameter,count,sum(paraDict.values()),100*count/sum(paraDict.values()),result))
+                        final_file_freq.write("{}\t{}\t{}\t{}\t{}\t{:.2f}\t{}\n".format(mo,cols,parameter,count,sum(paraDict.values()),100*count/sum(paraDict.values()),result))
 
 final_file.close()
 final_file_freq.close()
