@@ -1,9 +1,6 @@
 from huaweiDumpLibrary import tableList,excList,cellParser
 import sqlite3
-
-###########################################
-sqldbdate = "20220823"
-###########################################
+from dbname import sqldbdate
 
 sqldbname = sqldbdate + ".sqlite"
 folder = 'imports' + '/' + sqldbname

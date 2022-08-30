@@ -1,14 +1,10 @@
 from huaweiDumpLibrary import tableList,excList,cellParser
 import sqlite3
-
-###########################################
-sqldbdate = "20220823"
-###########################################
-
+from dbname import sqldbdate
 
 sqldbname = sqldbdate + ".sqlite"
 folder = 'imports' + '/' + sqldbname
-final_file = open("exports\\01_missingmo_counts" + sqldbdate +".txt","w")
+final_file = open("exports\\01_missingmo_counts_" + sqldbdate +".txt","w")
 
 table_list = tableList(sqldbname)
 

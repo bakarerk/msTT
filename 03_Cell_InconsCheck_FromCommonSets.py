@@ -1,8 +1,7 @@
 from huaweiDumpLibrary import parseDBSite,excList,cellParser
-
+from dbname import sqldbdate
 
 ###########################################
-sqldbdate = "20220823 - Copy"
 molist = ["CELLHOCOMM","CELLHOPARACFG"]
 ###########################################
 
