@@ -2,7 +2,7 @@ from huaweiDumpLibrary import parseDBSite,excList,cellParser
 from dbname import sqldbdate
 
 ###########################################
-molist = ["CELLHOCOMM","CELLHOPARACFG"]
+molist = ["U2LTEHONCOV"]
 ###########################################
 
 sqldbname = sqldbdate + ".sqlite"

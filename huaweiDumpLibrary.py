@@ -32,9 +32,10 @@ def cellParser(mo,sqlfile):
 
     return innerJoin
 
-def parseDBSite(mo):
+def parseDBSite(mo,sqlfile):
 
-    conn = sqlite3.connect("20220817.sqlite")
+    folder = 'imports' + '/' + sqlfile
+    conn = sqlite3.connect(folder)
     cur = conn.cursor()
     df = pd.read_sql("select * from {}".format(mo), conn)
 
