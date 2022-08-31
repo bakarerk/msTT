@@ -7,7 +7,7 @@ molist =["ENODEBALGOSWITCH"]
 
 sqldbname = sqldbdate + ".sqlite"
 
-final_file = open("exports\\05_all_sets_distribution_" + sqldbdate +".txt","w")
+final_file = open("exports\\05_site_sets_distribution_" + sqldbdate +".txt","w")
 
 
 #,"HoMeasComm","IntraRatHoComm","InterRatHoComm","eNodeBFlowCtrlPara","CspcAlgoPara","VQMAlgo","ServiceDiffSetting","eNodeBMlb","ParaAutoOptCfg","BlindNcellOpt","QoEHoCommonCfg","eNodeBAlmCfg","ENodeBFrameOffset","ANR","MRO","NCellClassMgt","FddResMode","eNodeBResModeAlgo","EuUlCoSchCfg","eNBRsvdPara","EuCoSchULICSCfg","ENodeBAlgoSwitch","ENodeBNbPara","CSFallBackPolicyCfg","CnOperatorHoCfg","CSFallBackBlindHoCfg","EnodebAlgoExtSwitch","RrcConnStateTimer","ENodeBConnStateTimer","PdcpRohcPara","ENodeBCipherCap","ENodeBIntegrityCap","CounterCheckPara","EnodebCounterParaGrp","ANRMeasureParam","eNodeBUSParaCfg","SrbCfg","UserPriority","UsUeSpidConfig","MultiCarrUnifiedSch","EnodebRsvdParamExt","UeTimerConfig","GlobalProcSwitch","ScPolicy","IopsCfg"]

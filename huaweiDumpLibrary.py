@@ -11,20 +11,29 @@ def cellParser(mo,sqlfile):
     cur = conn.cursor()
     df = pd.read_sql("select * from {}".format(mo), conn)
     cols = df.columns.values
-    if "CELLID" in cols:
+    if "LOCALCELLID" in cols:
+        df["ref"] = df["NE"] + "-" + df["LOCALCELLID"]
+        cellDF = pd.read_sql("select * from {}".format("CELL"), conn)
+        cellDF["ref"] = cellDF["NE"] + "-" + cellDF["LOCALCELLID"]
+        cellDF["enode"] = cellDF["enode"]
+        cellDF = cellDF[["ref","DLEARFCN"]]
+        cellDF.rename(columns={"DLEARFCN":"FREQ"}, inplace = True)
+    elif "CELLID" in cols:
         df["ref"] = df["NE"] + "-" + df["CELLID"]
         cellDF = pd.read_sql("select * from {}".format("UCELL"), conn)
         cellDF["ref"] = cellDF["NE"] + "-" + cellDF["CELLID"]
         cellDF = cellDF[["ref","UARFCNDOWNLINK"]]
         cellDF.rename(columns={"UARFCNDOWNLINK":"FREQ"}, inplace = True)
-    elif "LOCALCELLID" in cols:
-        df["ref"] = df["NE"] + "-" + df["LOCALCELLID"]
-        cellDF = pd.read_sql("select * from {}".format("CELL"), conn)
-        cellDF["ref"] = cellDF["NE"] + "-" + cellDF["LOCALCELLID"]
-        cellDF = cellDF[["ref","DLEARFCN"]]
-        cellDF.rename(columns={"DLEARFCN":"FREQ"}, inplace = True)
     else:
-        return "-1"
+        #return "-1"
+        ########
+        folder = 'imports' + '/' + sqlfile
+        conn = sqlite3.connect(folder)
+        cur = conn.cursor()
+        df = pd.read_sql("select * from {}".format(mo), conn)
+        ########
+        cur.close()
+        return df
 
     innerJoin = pd.merge(df,cellDF,on = "ref",how = "inner")
 
@@ -54,3 +63,11 @@ def tableList(sqlfile):
     cursor.close()
 
     return table_list
+
+
+def getCombinations(seq):
+    combinations = list()
+    for i in range(0,len(seq)):
+        for j in range(i+1,len(seq)):
+            combinations.append([seq[i],seq[j]])
+    return combinations

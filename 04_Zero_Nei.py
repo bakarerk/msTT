@@ -1,8 +1,8 @@
 from huaweiDumpLibrary import tableList,excList,cellParser
 import sqlite3
-from dbname import sqldbdate
+from dbname import sqldbdate,sqldbname
 
-sqldbname = sqldbdate + ".sqlite"
+
 folder = 'imports' + '/' + sqldbname
 final_file = open("exports\\04_zero_nei_" + sqldbdate +".txt","w")
 
@@ -23,7 +23,8 @@ for mo in table_list_3G:
         for i in result:
             print(mo)
             print(i)
-            final_file.write("3G\t{}\t{}\t{}\t{}\t{}\n".format(mo,i[0],i[1],i[2],i[3]))
+            if i[3] != "DEACTIVATED":
+                final_file.write("3G\t{}\t{}\t{}\t{}\t{}\n".format(mo,i[0],i[1],i[2],i[3]))
 
     except:
         cursor.close()
@@ -36,7 +37,8 @@ for mo in table_list_4G:
         for i in result:
             print(mo)
             print(i)
-            final_file.write("4G\t{}\t{}\t{}\t{}\t{}\n".format(mo,i[0],i[1],i[2],i[3]))
+            if i[3] != "CELL_DEACTIVE":
+                final_file.write("4G\t{}\t{}\t{}\t{}\t{}\n".format(mo,i[0],i[1],i[2],i[3]))
 
     except:
         cursor.close()
