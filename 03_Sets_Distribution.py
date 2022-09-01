@@ -2,8 +2,8 @@ from huaweiDumpLibrary import parseDBSite,excList,cellParser
 from dbname import sqldbdate
 
 ###########################################
-molist = ["RRCTRLSWITCH"]
-filenameEK = "RRCTRLSWITCH"
+molist = ["CELLHSUPA","CELLINTERFREQHOCOV","CELLHSDPCCH","CELLMCLDR","CELLU2LTEHONCOV","CELLINTERRATHOCOV"]
+filenameEK = "missing_mo_01092022"
 ###########################################
 
 sqldbname = sqldbdate + ".sqlite"

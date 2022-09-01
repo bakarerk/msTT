@@ -1,4 +1,4 @@
-sqldbdate = "20220823"
+sqldbdate = "20220831"
 
 
 sqldbname = sqldbdate + ".sqlite"

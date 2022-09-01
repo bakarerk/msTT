@@ -66,6 +66,8 @@ def tableList(sqlfile):
 
 
 def getCombinations(seq):
+    #2 li kombinasyonları bulur, sahadaki butun cellid'leri komşuluk ilişkisi vermesi için kullanılıyor
+    #(11,12,31,32) --> (11,12),(11,13),(11,31),(11,31),(11,32),(12,31),(12,32)
     combinations = list()
     for i in range(0,len(seq)):
         for j in range(i+1,len(seq)):
