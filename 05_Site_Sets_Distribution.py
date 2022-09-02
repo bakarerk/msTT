@@ -1,4 +1,4 @@
-from huaweiDumpLibrary import parseDBSite,excList,cellParser
+from huaweiDumpLibrary import parseDBSite,excList,distributionCalc
 from dbname import sqldbdate
 
 ###########################################

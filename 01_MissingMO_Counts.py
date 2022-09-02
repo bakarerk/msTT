@@ -1,4 +1,4 @@
-from huaweiDumpLibrary import tableList,excList,cellParser
+from huaweiDumpLibrary import tableList,excList,distributionCalc
 import sqlite3
 from dbname import sqldbdate
 

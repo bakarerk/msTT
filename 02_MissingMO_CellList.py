@@ -1,4 +1,4 @@
-from huaweiDumpLibrary import tableList,excList,cellParser
+from huaweiDumpLibrary import tableList,excList,distributionCalc
 import sqlite3
 from dbname import sqldbdate
 
@@ -15,9 +15,6 @@ final_file = open("exports\\02_missingmo_cells_" + sqldbdate + "_" + filenameEK 
 #table_list = tableList(sqldbname)
 
 conn = sqlite3.connect(folder)
-
-
-
 
 for mo in table_list_3G:
     try:

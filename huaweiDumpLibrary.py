@@ -2,9 +2,11 @@ import sqlite3
 import pandas as pd
 import numpy as np
 
-excList = ["ref","FREQ","UARFCNDOWNLINK","PHYCELLID","LOCALCELLID","NE","CELLID","LOGICRNCID","ENODEBFUNCTIONNAME","CELLNAME","DLEARFCN","CELLACTIVESTATE","CELLADMINSTATE"] #parametre içermeyen kolonları çıkarmak için
+groupidList = ["RRCCAUSE","INTERFREQHOGROUPID","QCI","PCCDLEARFCN","SCCDLEARFCN","DRXPARAGROUPID","INTERRATHOGERANGROUPID","INTERRATHOUTRANGROUPID"]
+excList = groupidList + ["ref","FREQ","UARFCNDOWNLINK","PHYCELLID","LOCALCELLID","NE","CELLID","LOGICRNCID","ENODEBFUNCTIONNAME","CELLNAME","DLEARFCN","CELLACTIVESTATE","CELLADMINSTATE"] #parametre içermeyen kolonları çıkarmak için
 
-def cellParser(mo,sqlfile):
+
+def distributionCalc(mo,sqlfile):
 
     folder = 'imports' + '/' + sqlfile
     conn = sqlite3.connect(folder)
@@ -15,7 +17,6 @@ def cellParser(mo,sqlfile):
         df["ref"] = df["NE"] + "-" + df["LOCALCELLID"]
         cellDF = pd.read_sql("select * from {}".format("CELL"), conn)
         cellDF["ref"] = cellDF["NE"] + "-" + cellDF["LOCALCELLID"]
-        cellDF["enode"] = cellDF["enode"]
         cellDF = cellDF[["ref","DLEARFCN"]]
         cellDF.rename(columns={"DLEARFCN":"FREQ"}, inplace = True)
     elif "CELLID" in cols:
@@ -73,3 +74,14 @@ def getCombinations(seq):
         for j in range(i+1,len(seq)):
             combinations.append([seq[i],seq[j]])
     return combinations
+
+
+def exportMO(mo,sqlfile):
+
+    folder = 'imports' + '/' + sqlfile
+    conn = sqlite3.connect(folder)
+    cur = conn.cursor()
+    df = pd.read_sql("select * from {}".format(mo), conn)
+
+    return df
+
