@@ -3,9 +3,9 @@ from dbname import sqldbdate
 
 ###########################################
 #molist = ["CELLHSUPA","CELLINTERFREQHOCOV","CELLHSDPCCH","CELLMCLDR","CELLU2LTEHONCOV","CELLINTERRATHOCOV"]
-molist =["CELLALGOSWITCH"]
-filenameEK = "test2"
-###########################################
+molist =["CELLPDCCHALGO"]#,"ENODEBALGOSWITCH"]#,"NBMPARA","FRCCHLTYPEPARA","FRC","RRCESTCAUSE","DCCC","HSDPCCH","UCSVOICEPPC","STATETIMER","CONNMODETIMER"]#,"ENodeBAlgoSwitch","InterRatPolicyCfgGroup","InterRatHoUtranGroup","CellHoParaCfg","QciPara"]#,"CELLU2LTEHONCOV"]
+filenameEK = "CELLPDCCHALGO"
+########################################### s
 
 sqldbname = sqldbdate + ".sqlite"
 
@@ -28,6 +28,7 @@ for mo in molist:
             crossed_list = list(crossed)
             if len(crossed) > 0:
                 crossed_list.insert(0,cols)
+                #crossed_list.insert(-1,"FREQ")
                 newDF =curMO[crossed_list].groupby(crossed_list).size()#groupid
                 paraDict = newDF.to_dict()
             #group based değilse

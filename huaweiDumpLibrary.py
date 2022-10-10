@@ -2,8 +2,40 @@ import sqlite3
 import pandas as pd
 import numpy as np
 
-groupidList = ["RRCCAUSE","INTERFREQHOGROUPID","QCI","PCCDLEARFCN","SCCDLEARFCN","DRXPARAGROUPID","INTERRATHOGERANGROUPID","INTERRATHOUTRANGROUPID"]
-excList = groupidList + ["ref","FREQ","UARFCNDOWNLINK","PHYCELLID","LOCALCELLID","NE","CELLID","LOGICRNCID","ENODEBFUNCTIONNAME","CELLNAME","DLEARFCN","CELLACTIVESTATE","CELLADMINSTATE"] #parametre içermeyen kolonları çıkarmak için
+groupidList = ["INTERRATHOUTRANGROUPID","INTERRATHOCOMMGROUPID","INTERRATPOLICYCFGGROUPID","ASPARAGROUPID","RRCCAUSE","INTERFREQHOGROUPID","QCI","PCCDLEARFCN","SCCDLEARFCN","DRXPARAGROUPID","INTERRATHOGERANGROUPID","INTERRATHOUTRANGROUPID","DLEARFCN","SRBINDEX","TRCHID","RABINDEX"]
+excList = groupidList + ["ref","FREQ","NODEBFUNCTIONNAME","ULOCELLID","UARFCNDOWNLINK","PHYCELLID","LOCALCELLID","NE","CELLID","LOGICRNCID","ENODEBFUNCTIONNAME","CELLNAME","CELLACTIVESTATE","CELLADMINSTATE"] #parametre içermeyen kolonları çıkarmak için
+
+
+def exportFilteredDictFreq(mo,sqlfile):
+    folder = 'imports' + '/' + sqlfile
+    conn = sqlite3.connect(folder)
+    cur = conn.cursor()
+    df = pd.read_sql("select * from {}".format(mo), conn)
+    cur.close()
+
+    cols = df.columns.values
+    if "LOCALCELLID" in cols:
+        df["New"] = df["NE"] + ":" + df["LOCALCELLID"]
+        cellDF = pd.read_sql("select * from {}".format("CELL"), conn)
+        cellDF["New"] = cellDF["NE"] + "-" + cellDF["LOCALCELLID"]
+        cellDF = cellDF[["New","DLEARFCN"]]
+        cellDF.rename(columns={"DLEARFCN":"FREQ"}, inplace = True)
+        df.set_index("New",inplace=True)
+        innerJoin = pd.merge(df, cellDF, on="New", how="inner")
+
+        dfdict = innerJoin.to_dict()
+    elif "CELLID" in cols:
+        df["New"] = df["NE"] + ":" + df["CELLID"]
+        df.set_index("New",inplace=True)
+    else:
+        df["New"] = df["NE"]
+        df.set_index("New", inplace=True)
+        df["FREQ"] = "ALL"
+        dfdict = df.to_dict()
+
+
+
+    return dfdict
 
 
 def distributionCalc(mo,sqlfile):
@@ -19,6 +51,7 @@ def distributionCalc(mo,sqlfile):
         cellDF["ref"] = cellDF["NE"] + "-" + cellDF["LOCALCELLID"]
         cellDF = cellDF[["ref","DLEARFCN"]]
         cellDF.rename(columns={"DLEARFCN":"FREQ"}, inplace = True)
+
     elif "CELLID" in cols:
         df["ref"] = df["NE"] + "-" + df["CELLID"]
         cellDF = pd.read_sql("select * from {}".format("UCELL"), conn)
@@ -32,12 +65,15 @@ def distributionCalc(mo,sqlfile):
         conn = sqlite3.connect(folder)
         cur = conn.cursor()
         df = pd.read_sql("select * from {}".format(mo), conn)
+        df["FREQ"] = "ALL"
+        df["ref"] = df["NE"]
+        df.set_index("ref",inplace=True)
         ########
         cur.close()
         return df
 
     innerJoin = pd.merge(df,cellDF,on = "ref",how = "inner")
-
+    innerJoin.set_index("ref", inplace=True)
     cur.close()
 
     return innerJoin
@@ -82,6 +118,75 @@ def exportMO(mo,sqlfile):
     conn = sqlite3.connect(folder)
     cur = conn.cursor()
     df = pd.read_sql("select * from {}".format(mo), conn)
+    cur.close()
 
     return df
 
+def enodebList(sqlfile):
+    folder = 'imports' + '/' + sqlfile
+    conn = sqlite3.connect(folder)
+    cur = conn.cursor()
+    df = pd.read_sql("select * from ENODEBFUNCTION", conn)
+    cur.close()
+
+    return df
+
+
+def exportFilteredDict(mo,sqlfile):
+    folder = 'imports' + '/' + sqlfile
+    conn = sqlite3.connect(folder)
+    cur = conn.cursor()
+    df = pd.read_sql("select * from {}".format(mo), conn)
+    cur.close()
+
+    cols = df.columns.values
+    if "LOCALCELLID" in cols:
+        df["New"] = df["NE"] + ":" + df["LOCALCELLID"]
+        df.set_index("New",inplace=True)
+    elif "CELLID" in cols:
+        df["New"] = df["NE"] + ":" + df["CELLID"]
+        df.set_index("New",inplace=True)
+    else:
+        df["New"] = df["NE"]
+        df.set_index("New", inplace=True)
+
+    dfdict = df.to_dict()
+
+    return dfdict
+
+
+def distributionCalcSingleSite(mo,sqlfile,ne):
+
+    folder = 'imports' + '/' + sqlfile
+    conn = sqlite3.connect(folder)
+    cur = conn.cursor()
+    df = pd.read_sql("select * from {} where 'NE' = '{}' ".format(mo,ne), conn)
+    cols = df.columns.values
+    if "LOCALCELLID" in cols:
+        df["ref"] = df["NE"] + "-" + df["LOCALCELLID"]
+        cellDF = pd.read_sql("select * from {}".format("CELL"), conn)
+        cellDF["ref"] = cellDF["NE"] + "-" + cellDF["LOCALCELLID"]
+        cellDF = cellDF[["ref","DLEARFCN"]]
+        cellDF.rename(columns={"DLEARFCN":"FREQ"}, inplace = True)
+    elif "CELLID" in cols:
+        df["ref"] = df["NE"] + "-" + df["CELLID"]
+        cellDF = pd.read_sql("select * from {}".format("UCELL"), conn)
+        cellDF["ref"] = cellDF["NE"] + "-" + cellDF["CELLID"]
+        cellDF = cellDF[["ref","UARFCNDOWNLINK"]]
+        cellDF.rename(columns={"UARFCNDOWNLINK":"FREQ"}, inplace = True)
+    else:
+        #return "-1"
+        ########
+        folder = 'imports' + '/' + sqlfile
+        conn = sqlite3.connect(folder)
+        cur = conn.cursor()
+        df = pd.read_sql("select * from {}".format(mo), conn)
+        ########
+        cur.close()
+        return df
+
+    innerJoin = pd.merge(df,cellDF,on = "ref",how = "inner")
+
+    cur.close()
+
+    return innerJoin

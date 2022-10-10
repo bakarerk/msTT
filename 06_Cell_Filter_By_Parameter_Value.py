@@ -2,10 +2,10 @@ from huaweiDumpLibrary import parseDBSite,excList,distributionCalc,exportMO
 from dbname import sqldbdate
 
 ###########################################
-molist = ["RRCTRLSWITCH"]
-paralist = ["NE","OPTIMIZATIONSWITCH2.RRC_CON_REQ_TIMES_COMPATIBLE_SWITCH"]
+molist = ["NBMPARA"]
+paralist = ["NE","RELIABILITYSWITCH.RELIABILITY_RRC_RETRANS_SWITCH"]
 
-filenameEK = "RRCTRLSWITCH"
+filenameEK = "huawei_ps_acces"
 ###########################################
 
 sqldbname = sqldbdate + ".sqlite"

@@ -63,6 +63,3 @@ for mo in table_list:
         cursor.close()
 
 final_file.close()
-
-
-
