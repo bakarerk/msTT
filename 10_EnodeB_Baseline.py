@@ -1,7 +1,7 @@
 from huaweiDumpLibrary import parseDBSite,excList,distributionCalc,groupidList,enodebList,exportFilteredDict,exportFilteredDictFreq
 from dbname import sqldbdate
 
-final_file = open("exports\\10_sets_distribution_" + sqldbdate + ".txt","w")
+final_file = open("exports\\10_baseline_" + sqldbdate + ".txt","w")
 
 sqldbname = sqldbdate + ".sqlite"
 
@@ -19,16 +19,6 @@ checklist = [
 ["CAMGTCFG","CELLCAALGOSWITCH","CaDl4CCSwitch-1","ALL"],
 ["CAMGTCFG","CELLCAALGOSWITCH","CaDl2CCExtSwitch-1","ALL"],
 ["CAMGTCFG","CELLCAALGOSWITCH","CaDl3CCExtSwitch-1","ALL"],
-["CELLALGOSWITCH","Dl256QamAlgoSwitch","Dl256QamSwitch-1","ALL"],
-["CELLALGOSWITCH","ENHANCEDMLBALGOSWITCH","SpectralEffBasedLoadEvalSw-1","ALL"],
-["CELLALGOSWITCH","ENHANCEDMLBALGOSWITCH","ActiveUeBasedLoadEvalSw-1","ALL"],
-["CELLALGOSWITCH","FreqLayerSwitch","UtranSrvccSteeringSwitch-OFF","ALL"],
-["CELLCQIADJALGO ","VOLTENACKDELTACQI","30","ALL"],
-["CELLALGOSWITCH","HoAllowedSwitch","CsfbAdaptiveBlindHoSwitch-0","ALL"],
-["CELLALGOSWITCH","HoAllowedSwitch","UtranCsfbSwitch-1","ALL"],
-["CELLALGOSWITCH","HoAllowedSwitch","UtranFlashCsfbSwitch-1","ALL"],
-["CELLALGOSWITCH","ULSCHEXTSWITCH","UlPAMCSwitch-1","ALL"],
-["CELLALGOSWITCH","ULSCHEXTSWITCH","EnhancedSchForSparseSwitch-1","ALL"],
 ["CELLDLSCHALGO","DLHARQMAXTXNUM","6","ALL"],
 ["CELLHOPARACFG","HoModeSwitch","UtranPsHoSwitch-0","ALL"],
 ["CELLHOPARACFG","HoModeSwitch","UtranRedirectSwitch-1","ALL"],
@@ -101,6 +91,18 @@ checklist = [
 ["CSFALLBACKHO","BLINDHOA1THDRSRP","-110","1450"],
 ["CSFALLBACKHO","BLINDHOA1THDRSRP","-110","3200"],
 ]
+checklist += [
+["CELLALGOSWITCH","Dl256QamAlgoSwitch","Dl256QamSwitch-1","ALL"],
+["CELLALGOSWITCH","ENHANCEDMLBALGOSWITCH","SpectralEffBasedLoadEvalSw-1","ALL"],
+["CELLALGOSWITCH","ENHANCEDMLBALGOSWITCH","ActiveUeBasedLoadEvalSw-1","ALL"],
+["CELLALGOSWITCH","FreqLayerSwitch","UtranSrvccSteeringSwitch-OFF","ALL"],
+["CELLCQIADJALGO ","VOLTENACKDELTACQI","30","ALL"],
+["CELLALGOSWITCH","HoAllowedSwitch","CsfbAdaptiveBlindHoSwitch-0","ALL"],
+["CELLALGOSWITCH","HoAllowedSwitch","UtranCsfbSwitch-1","ALL"],
+["CELLALGOSWITCH","HoAllowedSwitch","UtranFlashCsfbSwitch-1","ALL"],
+["CELLALGOSWITCH","ULSCHEXTSWITCH","UlPAMCSwitch-1","ALL"],
+["CELLALGOSWITCH","ULSCHEXTSWITCH","EnhancedSchForSparseSwitch-1","ALL"],
+]
 
 
 for chk in checklist:
@@ -142,6 +144,7 @@ for chk in checklist:
 
                     if "-" not in ne:
                         print("MOD {}:{}={};{}{}{}".format(mo,parameter,value,"{",ne,"}"))
+                        final_file.write("MOD {}:{}={};{}{}{}\n".format(mo,parameter,value,"{",ne,"}"))
                     elif freq == "ALL":  # cell parametresi
                         cellid = ne.split("-")[1]
                         enodeb = ne.split("-")[0]

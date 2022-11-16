@@ -7,6 +7,8 @@ folder = 'imports' + '/' + sqldbname
 
 cell = distributionCalc("CELL",sqldbname)
 
+cell["ref"] = cell["NE"] + "-" + cell["LOCALCELLID"]
+
 cell["_6200"] = cell["ref"] + ":" + cell["DLEARFCN"] + ":" + "6200"
 cell["_1306"] = cell["ref"] + ":" + cell["DLEARFCN"] + ":" + "1306"
 cell["_1450"] = cell["ref"] + ":" + cell["DLEARFCN"] + ":" + "1450"
@@ -18,6 +20,8 @@ cellstacked = cell.stack()
 cellstacked = cellstacked.to_frame()
 
 nfreq = distributionCalc("EUTRANINTERNFREQ",sqldbname)
+
+nfreq["ref"] = nfreq["NE"] + "-" + nfreq["LOCALCELLID"]
 
 nfreq["0"] = nfreq["ref"] + ":" + nfreq["FREQ"] + ":" + nfreq["DLEARFCN"]
 nfreq = nfreq[["0"]]
