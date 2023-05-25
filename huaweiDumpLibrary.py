@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 
 groupidList = ["RLCPDCPPARAGROUPID","INTERRATHOUTRANGROUPID","INTERRATHOCOMMGROUPID","INTERRATPOLICYCFGGROUPID","ASPARAGROUPID","RRCCAUSE","INTERFREQHOGROUPID","QCI","PCCDLEARFCN","SCCDLEARFCN","DRXPARAGROUPID","INTERRATHOGERANGROUPID","INTERRATHOUTRANGROUPID","DLEARFCN","SRBINDEX","TRCHID","RABINDEX"]
-excList = groupidList + ["ref","FREQ","NODEBFUNCTIONNAME","ULOCELLID","UARFCNDOWNLINK","PHYCELLID","LOCALCELLID","NE","CELLID","LOGICRNCID","ENODEBFUNCTIONNAME","CELLNAME","CELLACTIVESTATE","CELLADMINSTATE"] #parametre içermeyen kolonları çıkarmak için
+excList = groupidList + ["ref","ENODEBFUNCTIONNAME","ENODEBID","MCC","MNC","RNCID","GERANCELLID","SCELLENODEBID","NEIGHBOURCELLNAME","LOCALCELLNAME","FREQ","NODEBFUNCTIONNAME","ULOCELLID","UARFCNDOWNLINK","PHYCELLID","LOCALCELLID","NE","CELLID","LOGICRNCID","ENODEBFUNCTIONNAME","CELLNAME","CELLACTIVESTATE","CELLADMINSTATE"] #parametre içermeyen kolonları çıkarmak için
 
 
 def exportFilteredDictFreq(mo,sqlfile):
@@ -53,6 +53,7 @@ def distributionCalc(mo,sqlfile):
         cellDF.rename(columns={"DLEARFCN":"FREQ"}, inplace = True)
 
     elif "CELLID" in cols:
+        print("burdayım")
         df["ref"] = df["NE"] + "-" + df["CELLID"]
         cellDF = pd.read_sql("select * from {}".format("UCELL"), conn)
         cellDF["ref"] = cellDF["NE"] + "-" + cellDF["CELLID"]
@@ -68,6 +69,47 @@ def distributionCalc(mo,sqlfile):
         df["FREQ"] = "ALL"
         df["ref"] = df["NE"]
         df.set_index("ref",inplace=True)
+        ########
+        cur.close()
+        return df
+
+    innerJoin = pd.merge(df,cellDF,on = "ref",how = "inner")
+    innerJoin.set_index("ref", inplace=True)
+    cur.close()
+
+    return innerJoin
+
+
+def distributionCalcCity(mo, sqlfile,citycode):
+
+    folder = 'imports' + '/' + sqlfile
+    conn = sqlite3.connect(folder)
+    cur = conn.cursor()
+    df = pd.read_sql('select * from {} where substr(NE,2,2) = "{}"'.format(mo,citycode), conn)
+    cols = df.columns.values
+    if "LOCALCELLID" in cols:
+        df["ref"] = df["NE"] + "-" + df["LOCALCELLID"]
+        cellDF = pd.read_sql("select * from {}".format("CELL"), conn)
+        cellDF["ref"] = cellDF["NE"] + "-" + cellDF["LOCALCELLID"]
+        cellDF = cellDF[["ref", "DLEARFCN"]]
+        cellDF.rename(columns={"DLEARFCN": "FREQ"}, inplace=True)
+
+    elif "CELLID" in cols:
+        df["ref"] = df["NE"] + "-" + df["CELLID"]
+        cellDF = pd.read_sql("select * from {}".format("UCELL"), conn)
+        cellDF["ref"] = cellDF["NE"] + "-" + cellDF["CELLID"]
+        cellDF = cellDF[["ref", "UARFCNDOWNLINK"]]
+        cellDF.rename(columns={"UARFCNDOWNLINK": "FREQ"}, inplace=True)
+    else:
+        # return "-1"
+        ########
+        folder = 'imports' + '/' + sqlfile
+        conn = sqlite3.connect(folder)
+        cur = conn.cursor()
+        df = pd.read_sql("select * from {}".format(mo), conn)
+        df["FREQ"] = "ALL"
+        df["ref"] = df["NE"]
+        df.set_index("ref", inplace=True)
         ########
         cur.close()
         return df
@@ -190,3 +232,4 @@ def distributionCalcSingleSite(mo,sqlfile,ne):
     cur.close()
 
     return innerJoin
+

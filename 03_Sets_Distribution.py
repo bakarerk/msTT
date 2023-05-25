@@ -1,13 +1,13 @@
 from huaweiDumpLibrary import parseDBSite,excList,distributionCalc,groupidList
-from dbname import sqldbdate
+from dbname import sqldbdate,sqldbname
 
 ###########################################
 #molist = ["CELLHSUPA","CELLINTERFREQHOCOV","CELLHSDPCCH","CELLMCLDR","CELLU2LTEHONCOV","CELLINTERRATHOCOV"]
-molist =["CELLCOUNTERPARAGROUP"]#,"TimeAlignmentTimer","CAMGTCFG","CELLALGOEXTSWITCH","CELLALGOSWITCH","CELLCHPWRCFG","CELLCQIADJALGO","CELLCSPCPARA","CELLDLSCHALGO","CELLDRXPARA","CELLEICIC","CELLHOPARACFG","CELLPCALGO","CELLPDCCHALGO","CELLRACHALGO","CELLUCIONPUSCHPARA","CELLULPCCOMM","CELLULPCDEDIC","CELLULSCHALGO","ENODEBALGOSWITCH","ENODEBCONNSTATETIMER","GLOBALPROCSWITCH","HOMEASCOMM","INTRARATHOCOMM","IPGUARD","NCELLDLRSRPMEASPARA","PCCHCFG","PUCCHCFG","PUSCHCFG","RRCCONNSTATETIMER","S1","SCPOLICY","TCPMSSCTRL","TIMEALIGNMENTTIMER","UECOOPERATIONPARA","VQMALGO","WTCPPROXYALGO"]#,"ENODEBALGOSWITCH"]#,"NBMPARA","FRCCHLTYPEPARA","FRC","RRCESTCAUSE","DCCC","HSDPCCH","UCSVOICEPPC","STATETIMER","CONNMODETIMER"]#,"ENodeBAlgoSwitch","InterRatPolicyCfgGroup","InterRatHoUtranGroup","CellHoParaCfg","QciPara"]#,"CELLU2LTEHONCOV"]
-filenameEK = "CELLCOUNTERPARAGROUP"
+molist =["VQMAlgo"]
+
+filenameEK = "VQMAlgo"
 ########################################### s
 
-sqldbname = sqldbdate + ".sqlite"
 
 final_file = open("exports\\03_sets_distribution_" + sqldbdate + "_" + filenameEK + ".txt","w")
 final_file_freq = open("exports\\03_sets_distribution_" + sqldbdate + "_" + filenameEK + "_freq.txt","w")
@@ -18,6 +18,7 @@ for mo in molist:
     print(mo)
 
     curMO = distributionCalc(mo,sqldbname)
+
 
     for cols in curMO.columns.values:
 
@@ -52,7 +53,7 @@ for mo in molist:
             final_file.write("MO\tPARAMETER\t{}\tValue\tCount\tTotalNE\t%Dist\tResult\n".format(crossed_list[1:]))
             if "&" not in str(paraDict):
                 for parameter,count in paraDict.items():
-                    if crossed_list == "Parameter":
+                    if crossed_list == "Parameter" and sum(paraDict.values())>0:
                         final_file.write("{}\t{}\t{}\t{}\t{}\t{}\t{:.2f}\t{}\n".format(mo,cols,"-",parameter,count,sum(paraDict.values()),100*count/sum(paraDict.values()),result))
                         print("{}\t{}\t{}\t{}\t{}\t{}\t{:.2f}\t{}".format(mo,cols,"-",parameter,count,sum(paraDict.values()),100*count/sum(paraDict.values()),result))
                     else:
@@ -60,7 +61,7 @@ for mo in molist:
                         print("{}\t{}\t{}\t{}\t{}\t{}".format(mo, cols, parameter[1:],parameter[0], count,sum(paraDict.values())))
                         #print("{}\t{}\t{}{}\t\t{}\t{}\t{}\t{:.2f}\t{}".format(mo, cols, parameter[:-1],parameter[-1], count,sum(paraDict.values()),100 * count / sum(paraDict.values()), result))
 
-                if len(freqBasedDict.keys())>0:
+                if len(freqBasedDict.keys())>0 and sum(paraDict.values())>0:
                     for parameter,count in freqBasedDict.items():
                         final_file_freq.write("{}\t{}\t{}\t{}\t{}\t{:.2f}\t{}\n".format(mo,cols,parameter,count,sum(paraDict.values()),100*count/sum(paraDict.values()),result))
 

@@ -10,7 +10,7 @@ table_list = tableList(sqldbname)
 
 conn = sqlite3.connect(folder)
 
-table_list = ["ULOCELLMACHSPARA"]
+table_list = ["CNOPERATORQCIPARA"]
 
 #2G
 for mo in table_list:
